@@ -1,5 +1,6 @@
 import csv
 import datetime
+import json
 from os import listdir, makedirs
 from os.path import isfile, join, exists
 
@@ -25,12 +26,23 @@ class ContactInfo:
         """
         data_files = self.__find_files()
 
-        print 'test'
+        if not data_files:
+            print "No user data files found to process in: {0}".format(DATA_DIR)
+            exit(1)
+
+        processed_cnt = 0
+        for f in data_files:
+            print "Processing: {0}".format(f)
+            json = self.__get_file_json(f)
+
+            processed_cnt += 1
+
+        print "Processed {0} files".format(processed_cnt)
 
     def __find_files(self):
         """
-
-        :return:
+        Finds user data files in the data directory of stargazers.
+        :return: list of user data files to process
         """
         data_files = []
         for f in listdir(DATA_DIR):
@@ -38,6 +50,21 @@ class ContactInfo:
                 data_files.append(join(DATA_DIR, f))
 
         return data_files
+
+    def __get_file_json(self, f):
+        """
+        Strips the HTTP header off of the data file and returns a json string
+        :param f: data file to process
+        :return: json string
+        """
+        with open(f, 'r') as data_file:
+            found = False
+            for line in data_file:
+                if found:
+                    return line
+                else:
+                    if len(line.strip()) == 0:
+                        found = True
 
 
 if __name__ == '__main__':
