@@ -25,7 +25,7 @@ class ContactInfo:
         """
         with codecs.open(join(OUTPUT_DIR, OUTPUT_FILENAME), mode="w", encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
-            row = [unicode('login', 'utf-8'), unicode('name', 'utf-8'), unicode('email', 'utf-8'), unicode('company', 'utf-8'), unicode('bio', 'utf-8'), unicode('location', 'utf-8')]
+            row = ['login', 'name', 'email', 'company', 'bio', 'location']
             writer.writerow(row)
 
     def run(self):
