@@ -1,7 +1,12 @@
 import csv
 import json
+import codecs
+import sys
 from os import listdir, makedirs
 from os.path import isfile, join, exists
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 # Configuration
 DATA_DIR = '/Users/greg/workspace/stargazers-utils/tests/data'
@@ -18,9 +23,10 @@ class ContactInfo:
         """
         Initializes the contact info generation
         """
-        with open(join(OUTPUT_DIR, OUTPUT_FILENAME), 'a') as csvfile:
+        with codecs.open(join(OUTPUT_DIR, OUTPUT_FILENAME), mode="w", encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
-            writer.writerow(['login', 'name', 'email', 'company', 'bio', 'location'])
+            row = [unicode('login', 'utf-8'), unicode('name', 'utf-8'), unicode('email', 'utf-8'), unicode('company', 'utf-8'), unicode('bio', 'utf-8'), unicode('location', 'utf-8')]
+            writer.writerow(row)
 
     def run(self):
         """
@@ -61,7 +67,7 @@ class ContactInfo:
         :param f: data file to process
         :return: json
         """
-        with open(f, 'r') as data_file:
+        with codecs.open(f, mode='r', encoding='utf-8') as data_file:
             found = False
             for line in data_file:
                 if found:
@@ -91,16 +97,41 @@ class ContactInfo:
         Appends the contact data to the output csv file.
         :param contact_data: dict of contact data to append
         """
-        with open(join(OUTPUT_DIR, OUTPUT_FILENAME), 'a') as csvfile:
+        with codecs.open(join(OUTPUT_DIR, OUTPUT_FILENAME), mode='a', encoding='utf-8') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
-            row = [contact_data['login'],
-                   contact_data['name'],
-                   contact_data['email'],
-                   contact_data['company'],
-                   contact_data['bio'],
-                   contact_data['location']]
+            row = []
 
-            writer.writerow(row)
+            if contact_data['login']:
+                row.append(contact_data['login'])
+            else:
+                row.append("")
+
+            if contact_data['name']:
+                row.append(contact_data['name'])
+            else:
+                row.append("")
+
+            if contact_data['email']:
+                row.append(contact_data['email'])
+            else:
+                row.append("")
+
+            if contact_data['company']:
+                row.append(contact_data['company'])
+            else:
+                row.append("")
+
+            if contact_data['bio']:
+                row.append(contact_data['bio'])
+            else:
+                row.append("")
+
+            if contact_data['location']:
+                row.append(contact_data['location'])
+            else:
+                row.append("")
+
+            writer.writerow([s.encode('utf-8') for s in row])
 
 
 if __name__ == '__main__':
