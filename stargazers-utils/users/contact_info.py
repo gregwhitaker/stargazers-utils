@@ -5,7 +5,7 @@ from os.path import isfile, join, exists
 
 # Configuration
 DATA_DIR = '/Users/greg/workspace/stargazers-utils/tests/data'
-OUTPUT_DIR = '/Users/greg/workspace/stargazers-utils/tests'
+OUTPUT_DIR = '/Users/greg/workspace/stargazers-utils/tests/output'
 OUTPUT_FILENAME = 'contact_info.csv'
 
 
@@ -15,14 +15,16 @@ class ContactInfo:
     """
 
     def __init__(self):
+        """
+        Initializes the contact info generation
+        """
         with open(join(OUTPUT_DIR, OUTPUT_FILENAME), 'a') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
             writer.writerow(['login', 'name', 'email', 'company', 'bio', 'location'])
 
     def run(self):
         """
-
-        :return:
+        Runs the contact info generation
         """
         data_files = self.__find_files()
 
@@ -70,9 +72,9 @@ class ContactInfo:
 
     def __get_contact_data(self, json):
         """
-
-        :param data_str:
-        :return:
+        Retrieves contact data from user json read from file
+        :param json: user json data
+        :return: dict of contact data
         """
         contact_data = dict()
         contact_data['login'] = json['login']
@@ -86,13 +88,11 @@ class ContactInfo:
 
     def __append_to_output_file(self, contact_data):
         """
-
-        :param contact_data:
-        :return:
+        Appends the contact data to the output csv file.
+        :param contact_data: dict of contact data to append
         """
         with open(join(OUTPUT_DIR, OUTPUT_FILENAME), 'a') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
-
             row = [contact_data['login'],
                    contact_data['name'],
                    contact_data['email'],
